@@ -8,4 +8,4 @@ log_retention_days    = 7
 backup_retention_days = 1
 host_web_port         = 8282
 host_osmand_port      = 5255
-enable_backups        = false
+enable_backups        = true
