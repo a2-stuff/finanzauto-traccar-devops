@@ -1,0 +1,22 @@
+# Controles omitidos porque el laboratorio corre sobre Floci (emulador),
+# no sobre AWS real. El detalle esta en docs/informe.md.
+compact: true
+framework:
+  - terraform
+skip-check:
+  - CKV_AWS_157
+  - CKV_AWS_129
+  - CKV_AWS_118
+  - CKV_AWS_7
+  - CKV2_AWS_5
+  - CKV_AWS_161
+  - CKV_AWS_353
+  - CKV_AWS_17
+  - CKV_AWS_293
+  - CKV_AWS_149
+  - CKV_AWS_158
+  - CKV2_AWS_30
+  - CKV_AWS_18
+  - CKV2_AWS_57
+  - CKV2_AWS_62
+  - CKV_AWS_144

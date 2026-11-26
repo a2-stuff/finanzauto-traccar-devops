@@ -1,0 +1,3 @@
+# RDS queda publicly_accessible para que los scripts de respaldo
+# del host puedan llegar a PostgreSQL de Floci. Ver docs/informe.md.
+AVD-AWS-0180

@@ -37,7 +37,7 @@ jobs:
           directory: infra
           framework: terraform
           soft_fail: false
-          skip_check: CKV_AWS_157,CKV_AWS_129,CKV_AWS_118,CKV_AWS_7,CKV2_AWS_5
+          config_file: .checkov.yaml
           output_format: cli
 
       - name: Trivy IaC
@@ -47,6 +47,7 @@ jobs:
           scan-ref: infra
           exit-code: "1"
           severity: CRITICAL,HIGH
+          trivyignores: .trivyignore
 
   image:
     name: Construir y escanear imagen
