@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#0f172a"/>
+  <text x="40" y="40" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">AVL Traccar: Dev, UAT y Prod sobre Floci</text>
+  <text x="40" y="66" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">Misma imagen (SHA) promovida por GitHub Actions en un runner auto-hospedado. Secretos fuera del codigo.</text>
+
+  <rect x="40" y="90" width="220" height="90" rx="10" fill="#1e293b" stroke="#38bdf8"/>
+  <text x="150" y="128" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="14">GitHub PR + Actions</text>
+  <text x="150" y="150" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">CI: fmt, Checkov, Trivy</text>
+
+  <rect x="300" y="90" width="240" height="90" rx="10" fill="#1e293b" stroke="#38bdf8"/>
+  <text x="420" y="128" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="14">Runner auto-hospedado</text>
+  <text x="420" y="150" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">imagen traccar-avl:SHA</text>
+
+  <rect x="580" y="90" width="200" height="90" rx="10" fill="#1e293b" stroke="#f59e0b"/>
+  <text x="680" y="128" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="14">Aprobacion Prod</text>
+  <text x="680" y="150" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">GitHub Environment</text>
+
+  <rect x="40" y="220" width="1120" height="460" rx="14" fill="#111827" stroke="#334155"/>
+  <text x="60" y="250" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Floci (http://localhost:4566)</text>
+  <text x="60" y="272" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="12">S3 avl-tfstate + DynamoDB avl-tflock (estado separado por ambiente)</text>
+
+  <rect x="60" y="300" width="340" height="250" rx="10" fill="#1e293b" stroke="#22c55e"/>
+  <text x="230" y="330" text-anchor="middle" fill="#86efac" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Dev :8282 / :5255</text>
+  <text x="80" y="365" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">ECS Traccar 256 CPU / 512 MiB</text>
+  <text x="80" y="390" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">RDS Postgres db.t3.micro 10 GiB</text>
+  <text x="80" y="415" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">Secrets Manager + SSM</text>
+  <text x="80" y="440" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">Logs CloudWatch 7 dias</text>
+  <text x="80" y="465" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">Sin bucket de backups</text>
+
+  <rect x="430" y="300" width="340" height="250" rx="10" fill="#1e293b" stroke="#38bdf8"/>
+  <text x="600" y="330" text-anchor="middle" fill="#7dd3fc" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">UAT :8182 / :5155</text>
+  <text x="450" y="365" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">ECS Traccar 256 CPU / 768 MiB</text>
+  <text x="450" y="390" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">RDS Postgres db.t3.micro 20 GiB</text>
+  <text x="450" y="415" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">Secrets Manager + SSM</text>
+  <text x="450" y="440" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">Logs CloudWatch 14 dias</text>
+  <text x="450" y="465" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">S3 backups, retencion RDS 3d</text>
+
+  <rect x="800" y="300" width="340" height="250" rx="10" fill="#1e293b" stroke="#f59e0b"/>
+  <text x="970" y="330" text-anchor="middle" fill="#fcd34d" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Prod :8082 / :5055</text>
+  <text x="820" y="365" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">ECS Traccar 512 CPU / 1024 MiB</text>
+  <text x="820" y="390" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">RDS Postgres db.t3.small 20 GiB</text>
+  <text x="820" y="415" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">Secrets Manager + SSM</text>
+  <text x="820" y="440" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">Logs 30 dias, dashboard, alarma</text>
+  <text x="820" y="465" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">S3 backups, retencion RDS 7d</text>
+  <text x="820" y="490" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="13">Rollback y smoke test</text>
+
+  <rect x="60" y="570" width="1120" height="90" rx="10" fill="#1e293b" stroke="#64748b"/>
+  <text x="80" y="605" fill="#e2e8f0" font-family="Segoe UI, Arial, sans-serif" font-size="14">Simulador GPS: scripts/start-sim.sh (OsmAnd, puerto 5055 en Prod; 5155 UAT; 5255 Dev)</text>
+  <text x="80" y="630" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="13">GET /api/server en cada UI. Backup: scripts/backup.sh prod. Restore en base traccar_restore. Alarma: scripts/fire-alarm.sh prod.</text>
+</svg>
