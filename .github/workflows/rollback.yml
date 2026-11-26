@@ -1,0 +1,21 @@
+name: Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Ambiente a revertir"
+        required: true
+        default: "prod"
+        type: choice
+        options: [dev, uat, prod]
+
+jobs:
+  rollback:
+    name: Rollback a la revision anterior
+    runs-on: self-hosted
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ejecutar rollback
+        run: scripts/rollback.sh ${{ inputs.environment }}
