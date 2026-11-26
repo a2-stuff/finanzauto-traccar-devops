@@ -1,5 +1,9 @@
 name: finanzauto-traccar
 
+# Demo local rapida (no sustituye el despliegue en Floci).
+# Postgres de este compose es solo para desarrollo en el portatil.
+# En Dev/UAT/Prod la base es RDS emulado en Floci.
+
 services:
   postgres:
     image: postgres:16
@@ -7,7 +11,7 @@ services:
     environment:
       POSTGRES_DB: traccar
       POSTGRES_USER: traccar
-      POSTGRES_PASSWORD: traccar
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-traccar}
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -18,7 +22,7 @@ services:
     restart: unless-stopped
 
   traccar:
-    image: traccar/traccar:latest
+    image: traccar/traccar:6.17.0
     container_name: finanzauto-traccar
     depends_on:
       postgres:
@@ -28,7 +32,7 @@ services:
       DATABASE_DRIVER: org.postgresql.Driver
       DATABASE_URL: jdbc:postgresql://postgres:5432/traccar
       DATABASE_USER: traccar
-      DATABASE_PASSWORD: traccar
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-traccar}
     ports:
       - "8082:8082"
       - "5055:5055"
