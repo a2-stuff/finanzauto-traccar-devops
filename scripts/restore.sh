@@ -25,13 +25,14 @@ fi
 FILE=/tmp/traccar-restore.sql
 "$AWS" s3 cp "$S3URI" "$FILE"
 export PGPASSWORD="$PASS"
+PG="$ROOT/scripts/pg-client.sh"
 # Restaura en una base aparte para no pisar prod a ciegas.
-psql -h "$ADDR" -p "$PORT" -U traccar -d postgres -v ON_ERROR_STOP=1 \
+"$PG" psql -h "$ADDR" -p "$PORT" -U traccar -d postgres -v ON_ERROR_STOP=1 \
   -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'traccar_restore';" \
   -c "DROP DATABASE IF EXISTS traccar_restore;" \
   -c "CREATE DATABASE traccar_restore OWNER traccar;"
-psql -h "$ADDR" -p "$PORT" -U traccar -d traccar_restore -v ON_ERROR_STOP=1 -f "$FILE" >/tmp/traccar-restore.log
-COUNT=$(psql -h "$ADDR" -p "$PORT" -U traccar -d traccar_restore -Atc "SELECT count(*) FROM information_schema.tables WHERE table_schema='public';")
+"$PG" psql -h "$ADDR" -p "$PORT" -U traccar -d traccar_restore -v ON_ERROR_STOP=1 -f "$FILE" >/tmp/traccar-restore.log
+COUNT=$("$PG" psql -h "$ADDR" -p "$PORT" -U traccar -d traccar_restore -Atc "SELECT count(*) FROM information_schema.tables WHERE table_schema='public';")
 unset PGPASSWORD
 PASS=""
 rm -f "$FILE"
