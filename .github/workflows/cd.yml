@@ -1,0 +1,86 @@
+name: CD
+
+# El runner auto-hospedado vive en este equipo y habla con Floci en
+# localhost:4566. Ver README para el registro y las reglas de seguridad.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Ambiente a desplegar si se dispara a mano"
+        required: false
+        default: "dev"
+        type: choice
+        options: [dev, uat, prod]
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Construir imagen y etiquetar con SHA
+    runs-on: self-hosted
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Construir y etiquetar
+        id: meta
+        run: |
+          set -euo pipefail
+          IMAGE="traccar-avl:${GITHUB_SHA}"
+          docker build -t "$IMAGE" -t "traccar-avl:${GITHUB_SHA:0:12}" .
+          # Intento de publicacion en ECR de Floci. Si el daemon no acepta
+          # el endpoint HTTP, la imagen local (mismo SHA) queda disponible
+          # para el runner auto-hospedado, que es el que despliega.
+          if aws --profile floci --endpoint-url http://localhost:4566 ecr describe-repositories --repository-names traccar-avl >/dev/null 2>&1 \
+             || aws --profile floci --endpoint-url http://localhost:4566 ecr create-repository --repository-name traccar-avl >/dev/null; then
+            echo "ECR de Floci disponible; el push puede fallar por HTTP sin TLS y no bloquea el despliegue local."
+          fi
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+  deploy-dev:
+    name: Promover a Dev
+    needs: build
+    runs-on: self-hosted
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - name: Desplegar Dev
+        env:
+          IMAGE: ${{ needs.build.outputs.image }}
+        run: scripts/tf.sh dev apply -var="image=${IMAGE}"
+      - name: Prueba de humo Dev
+        run: scripts/smoke-test.sh http://127.0.0.1:8282
+
+  deploy-uat:
+    name: Promover a UAT
+    needs: [build, deploy-dev]
+    runs-on: self-hosted
+    environment: uat
+    steps:
+      - uses: actions/checkout@v4
+      - name: Desplegar UAT
+        env:
+          IMAGE: ${{ needs.build.outputs.image }}
+        run: scripts/tf.sh uat apply -var="image=${IMAGE}"
+      - name: Prueba de humo UAT
+        run: scripts/smoke-test.sh http://127.0.0.1:8182
+
+  deploy-prod:
+    name: Promover a Prod (requiere aprobacion)
+    needs: [build, deploy-uat]
+    runs-on: self-hosted
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - name: Desplegar Prod
+        env:
+          IMAGE: ${{ needs.build.outputs.image }}
+        run: scripts/tf.sh prod apply -var="image=${IMAGE}"
+      - name: Prueba de humo Prod
+        run: scripts/smoke-test.sh http://127.0.0.1:8082
