@@ -5,6 +5,7 @@
 
 # Terraform
 .terraform/
+.terraform-*/
 *.tfstate
 *.tfstate.*
 *.tfplan
