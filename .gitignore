@@ -1,2 +1,25 @@
+# secretos y entorno local
 .env
 *.env
+!.env.example
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.tfstate.lock.info
+
+# logs y temporales
+*.log
+/tmp/
+__pycache__/
+*.pyc
+.idea/
+.vscode/
