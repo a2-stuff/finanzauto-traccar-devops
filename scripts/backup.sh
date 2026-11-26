@@ -21,7 +21,7 @@ PASS=$("$AWS" secretsmanager get-secret-value --secret-id "$SECRET_ARN" --query 
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)
 FILE="/tmp/traccar-${ENV}-${STAMP}.sql"
 export PGPASSWORD="$PASS"
-pg_dump -h "$ADDR" -p "$PORT" -U traccar -d traccar --no-owner --no-acl -f "$FILE"
+"$ROOT/scripts/pg-client.sh" pg_dump -h "$ADDR" -p "$PORT" -U traccar -d traccar --no-owner --no-acl -f "$FILE"
 unset PGPASSWORD
 PASS=""
 
