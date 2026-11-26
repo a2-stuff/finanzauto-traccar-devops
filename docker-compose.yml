@@ -1,0 +1,38 @@
+name: finanzauto-traccar
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: finanzauto-postgres
+    environment:
+      POSTGRES_DB: traccar
+      POSTGRES_USER: traccar
+      POSTGRES_PASSWORD: traccar
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U traccar -d traccar"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  traccar:
+    image: traccar/traccar:latest
+    container_name: finanzauto-traccar
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      CONFIG_USE_ENVIRONMENT_VARIABLES: "true"
+      DATABASE_DRIVER: org.postgresql.Driver
+      DATABASE_URL: jdbc:postgresql://postgres:5432/traccar
+      DATABASE_USER: traccar
+      DATABASE_PASSWORD: traccar
+    ports:
+      - "8082:8082"
+      - "5055:5055"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
