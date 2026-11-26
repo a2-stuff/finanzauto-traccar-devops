@@ -1,0 +1,14 @@
+variable "prefix" { type = string }
+variable "environment" { type = string }
+variable "image" { type = string }
+variable "cpu" { type = number }
+variable "memory" { type = number }
+variable "host_web_port" { type = number }
+variable "host_osmand_port" { type = number }
+variable "db_host" { type = string }
+variable "db_port" { type = number }
+variable "db_name" { type = string }
+variable "db_username" { type = string }
+variable "db_secret_arn" { type = string }
+variable "aws_endpoint_for_tasks" { type = string }
+variable "log_retention_days" { type = number }
