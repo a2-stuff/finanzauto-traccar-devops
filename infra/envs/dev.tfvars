@@ -1,0 +1,11 @@
+environment          = "dev"
+image                = "traccar-avl:local"
+ecs_cpu              = 256
+ecs_memory           = 512
+db_instance_class    = "db.t3.micro"
+db_allocated_storage = 10
+log_retention_days   = 7
+backup_retention_days = 1
+host_web_port        = 8282
+host_osmand_port     = 5255
+enable_backups       = false
