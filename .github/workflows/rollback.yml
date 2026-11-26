@@ -17,6 +17,6 @@ jobs:
     runs-on: [self-hosted, floci]
     environment: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Ejecutar rollback
         run: scripts/rollback.sh ${{ inputs.environment }}
