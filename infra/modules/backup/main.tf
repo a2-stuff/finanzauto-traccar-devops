@@ -3,6 +3,18 @@ resource "aws_kms_key" "backups" {
   description             = "CMK para respaldos de ${var.environment}."
   deletion_window_in_days = 7
   enable_key_rotation     = true
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowKeyUseInFloci"
+        Effect    = "Allow"
+        Principal = { AWS = "*" }
+        Action    = "kms:*"
+        Resource  = "*"
+      }
+    ]
+  })
 
   tags = {
     Environment = var.environment
@@ -67,6 +79,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "backups" {
 
     noncurrent_version_expiration {
       noncurrent_days = 7
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
     }
   }
 }
