@@ -21,6 +21,7 @@ TF_DIR="$ROOT/infra"
 VAR_FILE="$TF_DIR/envs/${ENV}.tfvars"
 BACKEND="$TF_DIR/envs/${ENV}.backend.hcl"
 DATA="$TF_DIR/.terraform-${ENV}"
+export TF_DATA_DIR="$DATA"
 
 mkdir -p "$DATA"
 cd "$TF_DIR"
