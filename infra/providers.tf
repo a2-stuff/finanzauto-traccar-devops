@@ -21,24 +21,24 @@ provider "aws" {
   skip_region_validation      = true
   s3_use_path_style           = true
 
-    endpoints {
-      apigateway          = var.aws_endpoint
-      cloudwatch          = var.aws_endpoint
-      cloudwatchevents    = var.aws_endpoint
-      cloudwatchlogs      = var.aws_endpoint
-      dynamodb            = var.aws_endpoint
-      ec2                 = var.aws_endpoint
-      ecr                 = var.aws_endpoint
-      ecs                 = var.aws_endpoint
-      elasticloadbalancing = var.aws_endpoint
-      iam                 = var.aws_endpoint
-      kms                 = var.aws_endpoint
-      logs                = var.aws_endpoint
-      rds                 = var.aws_endpoint
-      s3                  = var.aws_endpoint
-      secretsmanager      = var.aws_endpoint
-      sns                 = var.aws_endpoint
-      ssm                 = var.aws_endpoint
-      sts                 = var.aws_endpoint
-    }
+  endpoints {
+    apigateway           = var.aws_endpoint
+    cloudwatch           = var.aws_endpoint
+    cloudwatchevents     = var.aws_endpoint
+    cloudwatchlogs       = var.aws_endpoint
+    dynamodb             = var.aws_endpoint
+    ec2                  = var.aws_endpoint
+    ecr                  = var.aws_endpoint
+    ecs                  = var.aws_endpoint
+    elasticloadbalancing = var.aws_endpoint
+    iam                  = var.aws_endpoint
+    kms                  = var.aws_endpoint
+    logs                 = var.aws_endpoint
+    rds                  = var.aws_endpoint
+    s3                   = var.aws_endpoint
+    secretsmanager       = var.aws_endpoint
+    sns                  = var.aws_endpoint
+    ssm                  = var.aws_endpoint
+    sts                  = var.aws_endpoint
+  }
 }
