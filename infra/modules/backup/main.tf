@@ -9,7 +9,7 @@ resource "aws_kms_key" "backups" {
       {
         Sid       = "AllowKeyUseInFloci"
         Effect    = "Allow"
-        Principal = { AWS = "*" }
+        Principal = { AWS = "arn:aws:iam::000000000000:root" }
         Action    = "kms:*"
         Resource  = "*"
       }
@@ -71,7 +71,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "backups" {
     id     = "expire-old-dumps"
     status = "Enabled"
 
-    filter { prefix = "prod-db/" }
+    filter {
+      prefix = ""
+    }
 
     expiration {
       days = 30
@@ -79,6 +81,15 @@ resource "aws_s3_bucket_lifecycle_configuration" "backups" {
 
     noncurrent_version_expiration {
       noncurrent_days = 7
+    }
+  }
+
+  rule {
+    id     = "abort-incomplete-uploads"
+    status = "Enabled"
+
+    filter {
+      prefix = ""
     }
 
     abort_incomplete_multipart_upload {

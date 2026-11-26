@@ -8,7 +8,7 @@ resource "aws_kms_key" "ssm" {
       {
         Sid       = "AllowKeyUseInFloci"
         Effect    = "Allow"
-        Principal = { AWS = "*" }
+        Principal = { AWS = "arn:aws:iam::000000000000:root" }
         Action    = "kms:*"
         Resource  = "*"
       }
