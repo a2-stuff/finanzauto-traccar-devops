@@ -1,14 +1,18 @@
-# secretos y entorno local
+# Secretos y entorno local
 .env
+.env.*
+!.env.example
 *.env
 !.env.example
+.envrc
 
-# Terraform
+# Terraform (el lockfile .terraform.lock.hcl SI se versiona)
 .terraform/
 .terraform-*/
 *.tfstate
 *.tfstate.*
 *.tfplan
+*.tfplan.*
 crash.log
 crash.*.log
 override.tf
@@ -16,11 +20,77 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 .terraform.tfstate.lock.info
+# tfvars con secretos. Los envs/*.tfvars del repo no llevan contrasenas.
+terraform.tfvars
+terraform.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+*secret*.tfvars
+*secrets*.tfvars
 
-# logs y temporales
+# Respaldos y dumps de PostgreSQL
+*.sql
+*.dump
+*.sql.gz
+*.dump.gz
+*.pgdump
+backups/
+dumps/
+
+# Logs
 *.log
-/tmp/
+logs/
+
+# Node / Python
+node_modules/
 __pycache__/
 *.pyc
-.idea/
+*.pyo
+.venv/
+venv/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# Editores
 .vscode/
+.idea/
+*.swp
+*~
+
+# Video / OBS (el video de la prueba no va en el repo)
+*.mp4
+*.mkv
+*.mov
+*.avi
+*.flv
+
+# Credenciales y llaves
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+.aws/
+credentials
+credentials.json
+*.credentials
+
+# Runner auto-hospedado de GitHub Actions
+actions-runner/
+.runner
+
+# Datos locales de Floci
+floci-data/
+.floci/
+
+# Documentos privados de la entrega (viven fuera del repo)
+finanzauto-cuestionario.md
+finanzauto-video-guion.md
+cuestionario.md
