@@ -21,7 +21,9 @@ concurrency:
 jobs:
   build:
     name: Construir imagen y etiquetar con SHA
-    runs-on: self-hosted
+    # No ejecutar en PRs de forks: el runner tiene acceso a Floci en este equipo.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, floci]
     outputs:
       image: ${{ steps.meta.outputs.image }}
     steps:
@@ -45,8 +47,9 @@ jobs:
 
   deploy-dev:
     name: Promover a Dev
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     needs: build
-    runs-on: self-hosted
+    runs-on: [self-hosted, floci]
     environment: dev
     steps:
       - uses: actions/checkout@v4
@@ -59,8 +62,9 @@ jobs:
 
   deploy-uat:
     name: Promover a UAT
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     needs: [build, deploy-dev]
-    runs-on: self-hosted
+    runs-on: [self-hosted, floci]
     environment: uat
     steps:
       - uses: actions/checkout@v4
@@ -73,8 +77,9 @@ jobs:
 
   deploy-prod:
     name: Promover a Prod (requiere aprobacion)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     needs: [build, deploy-uat]
-    runs-on: self-hosted
+    runs-on: [self-hosted, floci]
     environment: prod
     steps:
       - uses: actions/checkout@v4
