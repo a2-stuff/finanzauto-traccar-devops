@@ -13,7 +13,7 @@ resource "aws_ecs_cluster" "this" {
 
   setting {
     name  = "containerInsights"
-    value = var.environment == "prod" ? "enabled" : "disabled"
+    value = "enabled"
   }
 
   tags = {
