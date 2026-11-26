@@ -17,6 +17,6 @@ resource "aws_secretsmanager_secret_version" "db" {
 
 resource "aws_ssm_parameter" "db_secret_arn" {
   name  = "/${var.prefix}/traccar/db-secret-arn"
-  type  = "String"
+  type  = "SecureString"
   value = aws_secretsmanager_secret.db.arn
 }
