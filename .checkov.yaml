@@ -20,3 +20,6 @@ skip-check:
   - CKV2_AWS_57
   - CKV2_AWS_62
   - CKV_AWS_144
+  # Traccar escribe logs y datos en el contenedor; el root fs de solo
+  # lectura rompe el arranque de la imagen oficial en este laboratorio.
+  - CKV_AWS_336
