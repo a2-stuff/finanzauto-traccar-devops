@@ -16,6 +16,9 @@ export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID:-test}"
 export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY:-test}"
 export AWS_PAGER=""
+export TF_IN_AUTOMATION=1
+export TF_PLUGIN_CACHE_DIR="${TF_PLUGIN_CACHE_DIR:-$ROOT/infra/.terraform-plugin-cache}"
+mkdir -p "$TF_PLUGIN_CACHE_DIR"
 
 TF_DIR="$ROOT/infra"
 VAR_FILE="$TF_DIR/envs/${ENV}.tfvars"
@@ -26,9 +29,31 @@ export TF_DATA_DIR="$DATA"
 mkdir -p "$DATA"
 cd "$TF_DIR"
 
+# init -reconfigure en cada llamada era el cuello de botella (~30s o mas).
+# Se reutiliza el backend ya inicializado salvo que falte o cambie el .hcl.
+ensure_init() {
+  local force="${1:-}"
+  local hashfile="$DATA/.backend.hash"
+  local hash
+  hash=$(sha256sum "$BACKEND" | awk '{print $1}')
+  local need=0
+  if [ "$force" = "reconfigure" ]; then
+    need=1
+  elif [ ! -f "$DATA/terraform.tfstate" ]; then
+    need=1
+  elif [ "$(cat "$hashfile" 2>/dev/null || true)" != "$hash" ]; then
+    need=1
+  fi
+  if [ "$need" = "1" ]; then
+    echo "Inicializando Terraform para ${ENV}..." >&2
+    terraform init -reconfigure -backend-config="$BACKEND" -input=false >&2
+    echo "$hash" > "$hashfile"
+  fi
+}
+
 case "$CMD" in
   init)
-    terraform init -reconfigure -backend-config="$BACKEND" "$@"
+    ensure_init reconfigure
     ;;
   validate)
     terraform init -backend=false -input=false >/dev/null
@@ -36,19 +61,19 @@ case "$CMD" in
     terraform validate "$@"
     ;;
   plan)
-    terraform init -reconfigure -backend-config="$BACKEND" -input=false >/dev/null
-    terraform plan -var-file="$VAR_FILE" "$@"
+    ensure_init
+    terraform plan -var-file="$VAR_FILE" -input=false "$@"
     ;;
   apply)
-    terraform init -reconfigure -backend-config="$BACKEND" -input=false >/dev/null
-    terraform apply -var-file="$VAR_FILE" -auto-approve "$@"
+    ensure_init
+    terraform apply -var-file="$VAR_FILE" -input=false -auto-approve "$@"
     ;;
   destroy)
-    terraform init -reconfigure -backend-config="$BACKEND" -input=false >/dev/null
-    terraform destroy -var-file="$VAR_FILE" -auto-approve "$@"
+    ensure_init
+    terraform destroy -var-file="$VAR_FILE" -input=false -auto-approve "$@"
     ;;
   output)
-    terraform init -reconfigure -backend-config="$BACKEND" -input=false >/dev/null
+    ensure_init
     terraform output "$@"
     ;;
   *)

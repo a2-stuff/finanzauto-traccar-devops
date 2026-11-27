@@ -106,6 +106,8 @@ scripts/backup.sh prod
 scripts/restore.sh prod
 ```
 
+`backup`, `restore` y `rollback` imprimen el avance por pasos con tiempos. `scripts/tf.sh` no vuelve a lanzar `terraform init` si el ambiente ya esta inicializado, asi que esos comandos ya no se quedan en silencio un par de minutos.
+
 ## Como desplegar a cada ambiente
 
 El mismo codigo vive en `infra/`. Cambia solo el archivo de variables y el key del backend:

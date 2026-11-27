@@ -8,6 +8,7 @@ URL="${URL%/}"
 echo "Probando ${URL}/api/server ..."
 BODY=""
 ok=0
+t0=$(date +%s)
 for i in $(seq 1 36); do
   if BODY=$(curl -sfS --max-time 20 "${URL}/api/server" 2>/dev/null); then
     if echo "$BODY" | jq -e '.version' >/dev/null; then
@@ -15,7 +16,8 @@ for i in $(seq 1 36); do
       break
     fi
   fi
-  echo "  intento ${i}: sin respuesta valida, reintento..."
+  elapsed=$(( $(date +%s) - t0 ))
+  echo "  esperando respuesta de /api/server ... ${elapsed}s (intento ${i}/36)"
   sleep 5
 done
 if [ "$ok" -ne 1 ]; then
