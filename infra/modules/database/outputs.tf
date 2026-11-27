@@ -1,16 +1,24 @@
+# El atributo port declarado en el recurso es 5432 (el de PostgreSQL
+# dentro del contenedor). Floci publica un puerto proxy distinto
+# (7001/7002/7003) en el Endpoint de la API. Lo leemos en vivo para
+# que JDBC y pg_dump no apunten a 172.17.0.2:5432 (el proceso de Floci).
+data "aws_db_instance" "live" {
+  db_instance_identifier = aws_db_instance.this.identifier
+}
+
 output "address" {
-  value       = aws_db_instance.this.address
-  description = "Hostname o IP del endpoint RDS."
+  value       = data.aws_db_instance.live.address
+  description = "Hostname o IP real del endpoint RDS que reporta la API de Floci."
 }
 
 output "port" {
-  value       = aws_db_instance.this.port
-  description = "Puerto del endpoint RDS."
+  value       = tonumber(element(split(":", data.aws_db_instance.live.endpoint), 1))
+  description = "Puerto real del endpoint RDS (proxy de Floci, no el 5432 declarado)."
 }
 
 output "endpoint" {
-  value       = aws_db_instance.this.endpoint
-  description = "Host:puerto del RDS."
+  value       = data.aws_db_instance.live.endpoint
+  description = "Host:puerto real del RDS."
 }
 
 output "db_name" {

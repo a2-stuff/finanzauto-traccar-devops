@@ -22,6 +22,12 @@ resource "aws_db_instance" "this" {
   apply_immediately            = true
   performance_insights_enabled = false
 
+  # Floci reescribe el puerto publicado (7001/7002/7003). No lo
+  # devolvemos a 5432 en cada apply.
+  lifecycle {
+    ignore_changes = [port]
+  }
+
   tags = {
     Environment = var.environment
     Project     = "avl-traccar"
