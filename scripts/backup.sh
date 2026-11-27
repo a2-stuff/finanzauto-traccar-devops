@@ -26,6 +26,6 @@ unset PGPASSWORD
 PASS=""
 
 "$AWS" s3 cp "$FILE" "s3://${BUCKET}/${ENV}-db/${STAMP}.sql"
-rm -f "$FILE"
+rm -f "$FILE" || true
 echo "Respaldo subido a s3://${BUCKET}/${ENV}-db/${STAMP}.sql"
 echo "$STAMP"

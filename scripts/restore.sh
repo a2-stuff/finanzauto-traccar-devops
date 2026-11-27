@@ -37,7 +37,7 @@ DEVICES=$("$PG" psql -h "$ADDR" -p "$PORT" -U traccar -d traccar_restore -Atc "S
 POSITIONS=$("$PG" psql -h "$ADDR" -p "$PORT" -U traccar -d traccar_restore -Atc "SELECT count(*) FROM tc_positions;" 2>/dev/null || echo 0)
 unset PGPASSWORD
 PASS=""
-rm -f "$FILE"
+rm -f "$FILE" || true
 echo "Restauracion OK en la base traccar_restore. Tablas publicas: ${COUNT}. Dispositivos: ${DEVICES}. Posiciones: ${POSITIONS}."
 if [ "${COUNT}" = "0" ]; then
   echo "Fallo de verificacion: la base restaurada no tiene tablas." >&2
