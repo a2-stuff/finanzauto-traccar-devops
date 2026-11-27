@@ -40,14 +40,15 @@ jobs:
           config_file: .checkov.yaml
           output_format: cli
 
+      - name: Instalar Trivy
+        working-directory: .
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/v0.76.2/contrib/install.sh | sh -s -- -b /usr/local/bin v0.76.2
+          trivy version
+
       - name: Trivy IaC
-        uses: aquasecurity/trivy-action@0.36.0
-        with:
-          scan-type: config
-          scan-ref: infra
-          exit-code: "1"
-          severity: CRITICAL,HIGH
-          trivyignores: .trivyignore
+        working-directory: .
+        run: trivy config --severity CRITICAL,HIGH --exit-code 1 --ignorefile .trivyignore infra
 
   image:
     name: Construir y escanear imagen
@@ -62,11 +63,10 @@ jobs:
       - name: Build
         run: docker build -t traccar-avl:${{ github.sha }} .
 
+      - name: Instalar Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/v0.76.2/contrib/install.sh | sh -s -- -b /usr/local/bin v0.76.2
+          trivy version
+
       - name: Trivy image
-        uses: aquasecurity/trivy-action@0.36.0
-        with:
-          scan-type: image
-          image-ref: traccar-avl:${{ github.sha }}
-          exit-code: "1"
-          severity: CRITICAL
-          ignore-unfixed: true
+        run: trivy image --severity CRITICAL --exit-code 1 --ignore-unfixed "traccar-avl:${{ github.sha }}"
