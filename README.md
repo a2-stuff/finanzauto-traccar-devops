@@ -108,6 +108,9 @@ scripts/restore.sh prod
 
 `backup`, `restore` y `rollback` imprimen el avance por pasos con tiempos. `scripts/tf.sh` no vuelve a lanzar `terraform init` si el ambiente ya esta inicializado, asi que esos comandos ya no se quedan en silencio un par de minutos.
 
+Para la grabacion, `scripts/demo.sh` corre cada paso por numero (`scripts/demo.sh 4` es el respaldo). `scripts/demo.sh --all` lanza los seis en orden y se detiene al primer fallo. El simulador GPS (paso 2) arranca en segundo plano y se detiene solo a los 5 minutos.
+
+
 ## Como desplegar a cada ambiente
 
 El mismo codigo vive en `infra/`. Cambia solo el archivo de variables y el key del backend:
